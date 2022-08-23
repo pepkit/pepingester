@@ -1,0 +1,3 @@
+peppy
+pepagent @ git+https://github.com/pepkit/pephub_db.git#egg=pepagent
+logmuse>=0.2.7

@@ -1,7 +1,8 @@
 import sys
 import peppy
 from pepdbagent import Connection
-from const import INPUT_TYPES, DEFAULT_TAG
+from pepdbagent.const import DEFAULT_TAG
+from const import INPUT_TYPES
 from utils import build_argparser, detect_input_type
 
 
@@ -34,6 +35,7 @@ def main():
             namespace=args.namespace,
             name=args.project_name,
             tag=(args.tag or DEFAULT_TAG),
+            update=True
         )
         return 0
 

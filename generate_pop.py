@@ -61,7 +61,6 @@ def parse_pep_dir(path_to_peps: str, fh: IO):
     for name in tqdm(os.listdir(path_to_peps), desc="Analyzing repository", leave=True):
         # build a path to the namespace
         path_to_namespace = f"{path_to_peps}/{name}"
-        name = name.lower()
 
         if is_valid_namespace(path_to_namespace):
             # traverse projects
@@ -70,7 +69,6 @@ def parse_pep_dir(path_to_peps: str, fh: IO):
             ):
                 # build path to project
                 path_to_proj = f"{path_to_namespace}/{proj}"
-                proj = proj.lower()
 
                 if is_valid_project(path_to_proj):
                     # build cfg file

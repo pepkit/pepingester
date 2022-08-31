@@ -1,0 +1,13 @@
+pipeline_name: pepingestor
+pipeline_type: sample
+command_template: >
+  python {pipeline.var_templates.path}
+  --hostname localhost
+  --username postgres
+  --password docker
+  --namespace {sample.namespace}
+  --project-name {sample.project_name}
+  {sample.location}
+
+var_templates:
+  path: pepingester.py

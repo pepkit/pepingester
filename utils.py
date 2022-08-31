@@ -3,6 +3,9 @@ import os
 import yaml
 import pathlib
 
+# from peppy import PEP_LATEST_VERSION
+PEP_LATEST_VERSION = "2.1.0"
+
 
 def build_argparser() -> argparse.ArgumentParser:
     """Build the cli arg parser"""
@@ -40,11 +43,12 @@ def build_argparser() -> argparse.ArgumentParser:
         help="Hostname of postgresql instance",
     )
     parser.add_argument(
-        "-b", "--database", dest="dbname", default="pep-base-sql", help="Database name"
+        "-b", "--database", dest="dbname", default="pep-db", help="Database name"
     )
     parser.add_argument("-n", "--namespace", dest="namespace", required=True)
-    parser.add_argument("-p", "--project", dest="project", required=True)
+    parser.add_argument("-p", "--project-name", dest="project_name", required=True)
     parser.add_argument("-t", "--tag", dest="tag")
+    parser.add_argument("-y", "--type", dest="type", default=None)
     parser.add_argument("pep", type=str, help="Path to PEP or GEO accession")
     return parser
 
@@ -92,6 +96,56 @@ def extract_project_file_name(path_to_proj: str) -> str:
                 This project will not be accessible by pephub. "
             )
         return "project_config.yaml"
+
+
+def is_valid_namespace(path: str) -> bool:
+    """
+    Check if a given path is a valid namespace directory. Function
+    Will check a given path for the following criteria:
+        1. Is a folder
+        2. Is not a "dot" file (e.g. .git)
+
+    :param str path - path to potential namespace
+    """
+    name = pathlib.Path(path).name
+    criteria = [os.path.isdir(path), not name.startswith(".")]
+    return all(criteria)
+
+
+def is_valid_project(path: str) -> bool:
+    """
+    Check if a given project name is a valid project
+    directory. Will check a given project for the following
+    criteria:
+        1. Is a folder
+        2. Is not a "dot" file (e.g. .git)
+
+    :param str path - path potential project
+    """
+    name = pathlib.Path(path).name
+    criteria = [os.path.isdir(path), not name.startswith(".")]
+    return all(criteria)
+
+
+def write_pop_cfg(
+    cfg_path: str,
+    sample_table_path: str,
+    pipeline_interface_file: str = "pipeline_interface.yaml",
+    looper_dir: str = "out",
+):
+    """
+    Create the pop confgiuration file
+    """
+    cfg = {
+        "pep_version": PEP_LATEST_VERSION,
+        "sample_table": sample_table_path,
+        "sample_modifiers": {
+            "append": {"pipeline_interfaces": pipeline_interface_file}
+        },
+        "looper": {"output_dir": looper_dir},
+    }
+    with open(cfg_path, "w") as fh:
+        yaml.dump(cfg, fh)
 
 
 def detect_input_type(pep_input: str) -> str:

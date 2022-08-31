@@ -1,8 +1,9 @@
 import sys
 import peppy
-from pepagent import PepAgent
-from const import DEFAULT_TAG, INPUT_TYPES
+from pepdbagent import Connection
+from const import INPUT_TYPES, DEFAULT_TAG
 from utils import build_argparser, detect_input_type
+
 
 def main():
     # build and parse args
@@ -10,7 +11,7 @@ def main():
     args = parser.parse_args()
 
     # init pep agent
-    pagent = PepAgent(
+    pagent = Connection(
         host=args.hostname,
         port=args.port,
         database=args.dbname,
@@ -18,7 +19,8 @@ def main():
         password=args.password,
     )
 
-    input_type = detect_input_type(args.pep)
+    # get PEP input type
+    input_type = args.type or detect_input_type(args.pep)
 
     if input_type not in INPUT_TYPES:
         raise ValueError(
@@ -28,15 +30,24 @@ def main():
     if input_type == "path":
         p = peppy.Project(args.pep)
         pagent.upload_project(
-            p, namespace=args.namespace, project=args.project, tag=(args.tag or DEFAULT_TAG)
+            p,
+            namespace=args.namespace,
+            name=args.project_name,
+            tag=(args.tag or DEFAULT_TAG),
         )
         return 0
-    
+
     if input_type == "geo":
-        # download geo
+        # here I will use the geofetch.Geofetcher object to create a
+        # peppy.Project object from an accession id and then
+        # upload it to the database
+        #
+        # for now I jjust print out the accession ID
+        print(f"GEO accession: {args.pep}")
         return 0
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     try:
         sys.exit(main())
     except KeyboardInterrupt:

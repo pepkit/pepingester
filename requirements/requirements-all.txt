@@ -1,6 +1,6 @@
-peppy
+peppy @ git+https://github.com/pepkit/peppy.git@dev#egg=peppy
 pepdbagent @ git+https://github.com/pepkit/pepdbagent.git@dev#egg=pepdbagent
 logmuse>=0.2.7
-geofetch @ git+https://github.com/pepkit/geofetch.git@dev#egg=geofetch
+geofetch @ git+https://github.com/pepkit/geofetch.git@refactoring#egg=geofetch
 looper
 tqdm

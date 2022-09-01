@@ -2,6 +2,7 @@ import sys
 import peppy
 from pepdbagent import Connection
 from pepdbagent.const import DEFAULT_TAG
+from geofetch import Geofetcher
 from const import INPUT_TYPES
 from utils import build_argparser, detect_input_type
 
@@ -20,6 +21,9 @@ def main():
         password=args.password,
     )
 
+    # init geofetcher
+    geofetcher = Geofetcher(acc_anno=True, processed=True)
+
     # get PEP input type
     input_type = args.type or detect_input_type(args.pep)
 
@@ -35,7 +39,6 @@ def main():
             namespace=args.namespace,
             name=args.project_name,
             tag=(args.tag or DEFAULT_TAG),
-            update=True
         )
         return 0
 
@@ -43,9 +46,16 @@ def main():
         # here I will use the geofetch.Geofetcher object to create a
         # peppy.Project object from an accession id and then
         # upload it to the database
-        #
-        # for now I jjust print out the accession ID
-        print(f"GEO accession: {args.pep}")
+        geo_result = geofetcher.get_project(args.pep)
+        print(geo_result.keys())
+
+        p = peppy.Project().from_dict()
+        pagent.upload_project(
+            p,
+            namespace=args.namespace,
+            name=args.project_name,
+            tag=(args.tag or DEFAULT_TAG),
+        )
         return 0
 
 

@@ -1,6 +1,10 @@
 looper:
   output_dir: out
 pep_version: 2.1.0
+postgres_db: ${POSTGRES_DB}
+postgres_host: ${POSTGRES_HOST}
+postgres_password: ${POSTGRES_PASSWORD}
+postgres_user: ${POSTGRES_USER}
 sample_modifiers:
   append:
     pipeline_interfaces: pipeline_interface.yaml

@@ -3,8 +3,7 @@ import os
 import yaml
 import pathlib
 
-# from peppy import PEP_LATEST_VERSION
-PEP_LATEST_VERSION = "2.1.0"
+from peppy.const import PEP_LATEST_VERSION
 
 
 def build_argparser() -> argparse.ArgumentParser:
@@ -12,7 +11,7 @@ def build_argparser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Upload directory of PEPs")
     parser.add_argument(
         "-d",
-        "-db-url",
+        "--db-url",
         dest="db_url",
         default=None,
         type=str,
@@ -52,6 +51,8 @@ def build_argparser() -> argparse.ArgumentParser:
     parser.add_argument("pep", type=str, help="Path to PEP or GEO accession")
     return parser
 
+def validate_environment_variables() -> str:
+    pass
 
 def build_connection_string(args: argparse.Namespace) -> str:
     """Build a connection string using the cli args"""
@@ -139,6 +140,10 @@ def write_pop_cfg(
     cfg = {
         "pep_version": PEP_LATEST_VERSION,
         "sample_table": sample_table_path,
+        "postgres_host": "${POSTGRES_HOST}",
+        "postgres_user": "${POSTGRES_USER}",
+        "postgres_password": "${POSTGRES_PASSWORD}",
+        "postgres_db": "${POSTGRES_DB}",
         "sample_modifiers": {
             "append": {"pipeline_interfaces": pipeline_interface_file}
         },

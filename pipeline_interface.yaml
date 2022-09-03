@@ -2,9 +2,10 @@ pipeline_name: pepingestor
 pipeline_type: sample
 command_template: >
   python {pipeline.var_templates.path}
-  --hostname localhost
-  --username postgres
-  --password docker
+  --hostname {project.postgres_host}
+  --username {project.postgres_user}
+  --password {project.postgres_password}
+  --database {project.postgres_db}
   --namespace {sample.namespace}
   --project-name {sample.project_name}
   {sample.location}
